@@ -33,7 +33,7 @@
 ## 使用方法
 
 ```
-/fetch_website_flow_analysis github.com
+/similarweb_analysis:fetch_website_flow_analysis stackoverflow.com 
 ```
 
 ## 输出
