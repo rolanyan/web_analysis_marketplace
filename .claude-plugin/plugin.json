@@ -1,0 +1,11 @@
+{
+  "name": "web_analysis_marketplace",
+  "version": "0.1.0",
+  "description": "A marketplace of Claude Code plugins for web data scraping and analysis workflows.",
+  "publisher": "yanqiang",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yanqiang/web_analysis_marketplace"
+  }
+}

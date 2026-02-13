@@ -1,0 +1,30 @@
+{
+  "name": "similarweb_analysis",
+  "version": "0.1.0",
+  "description": "Fetch website traffic overview and referral data from SimilarWeb Pro",
+  "author": {
+    "name": "yanqiang"
+  },
+  "commands": [
+    {
+      "name": "fetch_website_flow_analysis",
+      "description": "Fetch website performance overview and incoming referrals data from SimilarWeb for a given domain"
+    }
+  ],
+  "skills": [
+    {
+      "name": "fetch_website_flow_analysis",
+      "description": "Automated SimilarWeb data extraction for website traffic analysis"
+    }
+  ],
+  "dependencies": {
+    "plugins": ["dev-browser"],
+    "node": ">=18.0.0"
+  },
+  "permissions": [
+    "Bash",
+    "Read",
+    "Write",
+    "Edit"
+  ]
+}
