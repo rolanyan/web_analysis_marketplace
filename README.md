@@ -21,22 +21,27 @@ web_analysis_marketplace/
 
 ## 插件列表
 
-> 暂无插件，待添加。
+| 插件 | 描述 | 命令 |
+|------|------|------|
+| [similarweb_analysis](plugins/similarweb_analysis/) | 从 SimilarWeb Pro 自动提取网站流量概览和外链来源数据 | `/fetch_website_flow_analysis` |
 
 ## 安装使用
 
-### 方式一：符号链接
+在 Claude Code 中执行：
 
-```bash
-ln -s /path/to/web_analysis_marketplace/plugins/<plugin-name> ~/.claude/plugins/<plugin-name>
+```
+/plugin marketplace add rolanyan/web_analysis_marketplace
+/plugin install <plugin-name>@rolanyan/web_analysis_marketplace
 ```
 
-### 方式二：直接克隆
+例如安装 `similarweb_analysis` 插件：
 
-```bash
-git clone <repo-url>
-cd web_analysis_marketplace
 ```
+/plugin marketplace add rolanyan/web_analysis_marketplace
+/plugin install similarweb_analysis@rolanyan/web_analysis_marketplace
+```
+
+安装完成后重启 Claude Code。
 
 ## 开发新插件
 
