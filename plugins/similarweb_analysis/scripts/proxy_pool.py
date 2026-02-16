@@ -5,10 +5,10 @@
 - 自动重试和通道管理
 
 需要设置环境变量:
-  PROXY_KEY      — 代理产品 key
-  PROXY_AUTH_KEY — 代理认证 AuthKey
-  PROXY_AUTH_PWD — 代理认证 AuthPwd
-  PROXY_API_URL  — 代理 API 地址
+  PROXY_BIZ_ID   — 青云业务标识（Business ID）
+  PROXY_AUTH_KEY  — 青云 AuthKey（用于 API 提取和代理认证）
+  PROXY_AUTH_PWD  — 青云 AuthPwd（代理认证密码）
+  PROXY_API_URL   — 代理 API 地址
 """
 
 import requests
@@ -30,8 +30,8 @@ PROXY_API = _require_env("PROXY_API_URL")
 
 
 class ProxyPool:
-    def __init__(self, key=None, auth_key=None, auth_pwd=None):
-        self.key = key or _require_env("PROXY_KEY")
+    def __init__(self, biz_id=None, auth_key=None, auth_pwd=None):
+        self.biz_id = biz_id or _require_env("PROXY_BIZ_ID")
         self.auth_key = auth_key or _require_env("PROXY_AUTH_KEY")
         self.auth_pwd = auth_pwd or _require_env("PROXY_AUTH_PWD")
         self._current = None  # {"server": ..., "proxy_ip": ..., "deadline": ...}
@@ -39,7 +39,7 @@ class ProxyPool:
     def extract(self, num=1, keep_alive=3, max_retries=3, retry_interval=30):
         """提取代理 IP，自动重试通道占用"""
         params = {
-            "key": self.key,
+            "key": self.auth_key,
             "num": num,
             "format": "json",
             "distinct": "false",

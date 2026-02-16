@@ -37,7 +37,7 @@ openclaw config set plugins.load.paths '["path/to/web_analysis_marketplace/plugi
 
 # 3. Configure all environment variables (see "Environment Variables" section below)
 #    Additionally set OpenClaw plugin config:
-openclaw config set plugins.entries.similarweb-analysis.config.proxyKey "$PROXY_KEY"
+openclaw config set plugins.entries.similarweb-analysis.config.proxyBizId "$PROXY_BIZ_ID"
 openclaw config set plugins.entries.similarweb-analysis.config.proxyAuthKey "$PROXY_AUTH_KEY"
 openclaw config set plugins.entries.similarweb-analysis.config.proxyAuthPwd "$PROXY_AUTH_PWD"
 
@@ -107,22 +107,22 @@ All 5 variables must be configured before first use. Set them in `~/.claude/.env
 
 ```bash
 # Qingyun proxy IP pool
-export PROXY_KEY="your-proxy-key"
-export PROXY_AUTH_KEY="your-auth-key"
-export PROXY_AUTH_PWD="your-auth-pwd"
+export PROXY_BIZ_ID="your-biz-id"       # 青云「业务标识」, e.g. qccjgh6k
+export PROXY_AUTH_KEY="your-auth-key"    # 青云「AuthKey」, also the key= param in extraction URL
+export PROXY_AUTH_PWD="your-auth-pwd"    # 青云「AuthPwd」
 export PROXY_API_URL="https://overseas.proxy.qg.net/get"
 
 # SimilarWeb cookie file path
 export SW_COOKIE_FILE="/path/to/sw_cookies.txt"
 ```
 
-| Variable | Description |
-|----------|-------------|
-| `PROXY_KEY` | Qingyun proxy product key |
-| `PROXY_AUTH_KEY` | Qingyun proxy auth key |
-| `PROXY_AUTH_PWD` | Qingyun proxy auth password |
-| `PROXY_API_URL` | Qingyun proxy API endpoint |
-| `SW_COOKIE_FILE` | SimilarWeb cookie file path |
+| Variable | Qingyun Dashboard | Description |
+|----------|-------------------|-------------|
+| `PROXY_BIZ_ID` | 业务标识 | Business identifier, e.g. `qccjgh6k` |
+| `PROXY_AUTH_KEY` | AuthKey | Used for API extraction (`key=` param) and proxy auth |
+| `PROXY_AUTH_PWD` | AuthPwd | Proxy authentication password |
+| `PROXY_API_URL` | — | Qingyun proxy API endpoint |
+| `SW_COOKIE_FILE` | — | SimilarWeb cookie file path |
 
 For OpenClaw, additionally set via `openclaw config set plugins.entries.similarweb-analysis.config.*`.
 

@@ -20,22 +20,22 @@
 
 ```bash
 # 青云代理 IP 池
-export PROXY_KEY="你的代理产品Key"
-export PROXY_AUTH_KEY="你的AuthKey"
-export PROXY_AUTH_PWD="你的AuthPwd"
+export PROXY_BIZ_ID="你的业务标识"          # 青云后台「业务标识」，如 qccjgh6k
+export PROXY_AUTH_KEY="你的AuthKey"          # 青云后台「AuthKey」，也是提取链接 URL 中的 key 参数
+export PROXY_AUTH_PWD="你的AuthPwd"          # 青云后台「AuthPwd」
 export PROXY_API_URL="https://overseas.proxy.qg.net/get"
 
 # SimilarWeb cookie 文件路径
 export SW_COOKIE_FILE="/path/to/sw_cookies.txt"
 ```
 
-| 环境变量 | 说明 |
-|---------|------|
-| `PROXY_KEY` | 青云代理产品 Key |
-| `PROXY_AUTH_KEY` | 青云代理认证 AuthKey |
-| `PROXY_AUTH_PWD` | 青云代理认证 AuthPwd |
-| `PROXY_API_URL` | 青云代理 API 地址 |
-| `SW_COOKIE_FILE` | SimilarWeb cookie 文件路径 |
+| 环境变量 | 青云后台对应 | 说明 |
+|---------|------------|------|
+| `PROXY_BIZ_ID` | 业务标识 | 业务标识符，如 `qccjgh6k` |
+| `PROXY_AUTH_KEY` | AuthKey | 用于 API 提取（URL `key=` 参数）和代理认证 |
+| `PROXY_AUTH_PWD` | AuthPwd | 代理认证密码 |
+| `PROXY_API_URL` | — | 青云代理 API 地址 |
+| `SW_COOKIE_FILE` | — | SimilarWeb cookie 文件路径 |
 
 ## 前置依赖
 
@@ -110,7 +110,7 @@ openclaw config set plugins.load.paths '["~/Claude/web_analysis_marketplace/plug
 2. 配置代理凭据（通过 OpenClaw plugin config）：
 
 ```bash
-openclaw config set plugins.entries.similarweb-analysis.config.proxyKey "你的代理产品Key"
+openclaw config set plugins.entries.similarweb-analysis.config.proxyBizId "你的业务标识"
 openclaw config set plugins.entries.similarweb-analysis.config.proxyAuthKey "你的AuthKey"
 openclaw config set plugins.entries.similarweb-analysis.config.proxyAuthPwd "你的AuthPwd"
 ```

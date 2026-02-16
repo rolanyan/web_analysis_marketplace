@@ -11,7 +11,7 @@ const SCRIPTS_DIR = resolve(PLUGIN_DIR, "scripts");
 function buildEnv(pluginConfig?: Record<string, unknown>): NodeJS.ProcessEnv {
   const env = { ...process.env };
   if (!pluginConfig) return env;
-  if (pluginConfig.proxyKey) env.PROXY_KEY = String(pluginConfig.proxyKey);
+  if (pluginConfig.proxyBizId) env.PROXY_BIZ_ID = String(pluginConfig.proxyBizId);
   if (pluginConfig.proxyAuthKey)
     env.PROXY_AUTH_KEY = String(pluginConfig.proxyAuthKey);
   if (pluginConfig.proxyAuthPwd)
@@ -48,7 +48,7 @@ const similarwebPlugin = {
   name: "SimilarWeb Analysis",
   description:
     "Fetch website traffic data from SimilarWeb Pro via API proxy",
-  version: "0.3.0",
+  version: "0.3.3",
 
   register(api: OpenClawPluginApi) {
     const env = buildEnv(api.pluginConfig as Record<string, unknown>);
