@@ -11,7 +11,6 @@ import os
 import time
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-DEFAULT_COOKIE_FILE = os.path.join(SCRIPT_DIR, "..", "data", "sw_cookies.txt")
 
 SW_BASE = "https://pro.similarweb.com"
 
@@ -33,7 +32,14 @@ SW_HEADERS = {
 
 class SimilarWebAPI:
     def __init__(self, cookie_file=None, proxy_pool=None):
-        self.cookie_file = cookie_file or os.environ.get("SW_COOKIE_FILE", DEFAULT_COOKIE_FILE)
+        if not cookie_file:
+            cookie_file = os.environ.get("SW_COOKIE_FILE")
+            if not cookie_file:
+                raise RuntimeError(
+                    "环境变量 SW_COOKIE_FILE 未设置。请在 ~/.claude/.env 或 shell profile 中配置。\n"
+                    "详见插件 README.md 的「环境变量配置」章节。"
+                )
+        self.cookie_file = cookie_file
         self.proxy_pool = proxy_pool
         self._cookie_str = None
 

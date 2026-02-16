@@ -20,10 +20,7 @@ Automatically fetches website traffic data from SimilarWeb Pro — including vis
 # 2. Restart Claude Code, then login to SimilarWeb
 /similarweb_analysis:sw_login
 
-# 3. Configure proxy environment variables (in ~/.claude/.env or shell profile)
-export PROXY_KEY="your-proxy-key"
-export PROXY_AUTH_KEY="your-auth-key"
-export PROXY_AUTH_PWD="your-auth-pwd"
+# 3. Configure all environment variables (see "Environment Variables" section below)
 
 # 4. Fetch data
 /similarweb_analysis:fetch_website_flow_analysis_v2 github.com
@@ -38,10 +35,11 @@ cd plugins/similarweb_analysis && npm install
 # 2. Add plugin to OpenClaw config
 openclaw config set plugins.load.paths '["path/to/web_analysis_marketplace/plugins/similarweb_analysis"]'
 
-# 3. Configure proxy credentials
-openclaw config set plugins.entries.similarweb-analysis.config.proxyKey "your-proxy-key"
-openclaw config set plugins.entries.similarweb-analysis.config.proxyAuthKey "your-auth-key"
-openclaw config set plugins.entries.similarweb-analysis.config.proxyAuthPwd "your-auth-pwd"
+# 3. Configure all environment variables (see "Environment Variables" section below)
+#    Additionally set OpenClaw plugin config:
+openclaw config set plugins.entries.similarweb-analysis.config.proxyKey "$PROXY_KEY"
+openclaw config set plugins.entries.similarweb-analysis.config.proxyAuthKey "$PROXY_AUTH_KEY"
+openclaw config set plugins.entries.similarweb-analysis.config.proxyAuthPwd "$PROXY_AUTH_PWD"
 
 # 4. Login to SimilarWeb (requires dev-browser, run manually)
 python3 plugins/similarweb_analysis/scripts/sw_login.py
@@ -105,16 +103,28 @@ Data is saved to `web_data/{domain}/`:
 
 ## Environment Variables
 
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `PROXY_KEY` | v2 | Qingyun proxy product key |
-| `PROXY_AUTH_KEY` | v2 | Qingyun proxy auth key |
-| `PROXY_AUTH_PWD` | v2 | Qingyun proxy auth password |
-| `PROXY_API_URL` | No | Proxy API endpoint (default: overseas residential pool) |
-| `SW_COOKIE_FILE` | No | Custom cookie file path |
+All 5 variables must be configured before first use. Set them in `~/.claude/.env` or your shell profile (`~/.zshrc` / `~/.bashrc`):
 
-For Claude Code, set these in `~/.claude/.env` or your shell profile (`~/.zshrc`).
-For OpenClaw, set via `openclaw config set plugins.entries.similarweb-analysis.config.*`.
+```bash
+# Qingyun proxy IP pool
+export PROXY_KEY="your-proxy-key"
+export PROXY_AUTH_KEY="your-auth-key"
+export PROXY_AUTH_PWD="your-auth-pwd"
+export PROXY_API_URL="https://overseas.proxy.qg.net/get"
+
+# SimilarWeb cookie file path
+export SW_COOKIE_FILE="/path/to/sw_cookies.txt"
+```
+
+| Variable | Description |
+|----------|-------------|
+| `PROXY_KEY` | Qingyun proxy product key |
+| `PROXY_AUTH_KEY` | Qingyun proxy auth key |
+| `PROXY_AUTH_PWD` | Qingyun proxy auth password |
+| `PROXY_API_URL` | Qingyun proxy API endpoint |
+| `SW_COOKIE_FILE` | SimilarWeb cookie file path |
+
+For OpenClaw, additionally set via `openclaw config set plugins.entries.similarweb-analysis.config.*`.
 
 ## Project Structure
 

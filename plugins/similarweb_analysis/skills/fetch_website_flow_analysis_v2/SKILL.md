@@ -13,7 +13,7 @@ description: Fetch website traffic data from SimilarWeb via API with proxy IP ro
 ## 前置条件
 
 - Python 3.10+ 已安装，`requests` 包可用
-- 环境变量已配置: `PROXY_KEY`, `PROXY_AUTH_KEY`, `PROXY_AUTH_PWD`（详见 README）
+- 环境变量已全部配置: `PROXY_KEY`, `PROXY_AUTH_KEY`, `PROXY_AUTH_PWD`, `PROXY_API_URL`, `SW_COOKIE_FILE`（详见 README）
 - 有效的 SimilarWeb cookie 文件（过期时运行 `/sw_login` 刷新）
 
 ## 参数
@@ -41,10 +41,10 @@ SCRIPT_DIR="<找到的 scripts 目录绝对路径>"
 3. 检查环境变量是否已配置（除非使用 `--no-proxy`）：
 
 ```bash
-python3 -c "import os; [print(f'  {k}: {'已设置' if os.environ.get(k) else '未设置'}') for k in ['PROXY_KEY','PROXY_AUTH_KEY','PROXY_AUTH_PWD']]"
+python3 -c "import os; [print(f'  {k}: {'已设置' if os.environ.get(k) else '未设置'}') for k in ['PROXY_KEY','PROXY_AUTH_KEY','PROXY_AUTH_PWD','PROXY_API_URL','SW_COOKIE_FILE']]"
 ```
 
-如果缺少环境变量，提示用户参考 README 的「环境变量配置」章节，并停止执行。
+5 个环境变量全部必须设置。如果缺少任何一个，提示用户参考 README 的「环境变量配置」章节，并停止执行。
 
 4. 检查 cookie 有效性：
 

@@ -16,28 +16,26 @@
 
 ## 环境变量配置
 
-v2 方案需要配置以下环境变量。在 `~/.claude/.env` 或 shell profile（`~/.zshrc` / `~/.bashrc`）中添加：
+首次使用前，必须配置以下 5 个环境变量。在 `~/.claude/.env` 或 shell profile（`~/.zshrc` / `~/.bashrc`）中添加：
 
 ```bash
-# 青云代理 IP 池（v2 必需）
+# 青云代理 IP 池
 export PROXY_KEY="你的代理产品Key"
 export PROXY_AUTH_KEY="你的AuthKey"
 export PROXY_AUTH_PWD="你的AuthPwd"
+export PROXY_API_URL="https://overseas.proxy.qg.net/get"
 
-# 可选: 代理 API 地址（默认 https://overseas.proxy.qg.net/get）
-# export PROXY_API_URL="https://overseas.proxy.qg.net/get"
-
-# 可选: 自定义 cookie 文件路径（默认在插件 data/ 目录下）
-# export SW_COOKIE_FILE="/path/to/sw_cookies.txt"
+# SimilarWeb cookie 文件路径
+export SW_COOKIE_FILE="/path/to/sw_cookies.txt"
 ```
 
-| 环境变量 | 必需 | 说明 |
-|---------|------|------|
-| `PROXY_KEY` | v2 必需 | 青云代理产品 Key |
-| `PROXY_AUTH_KEY` | v2 必需 | 青云代理认证 AuthKey |
-| `PROXY_AUTH_PWD` | v2 必需 | 青云代理认证 AuthPwd |
-| `PROXY_API_URL` | 可选 | 代理 API 地址，默认海外住宅池 |
-| `SW_COOKIE_FILE` | 可选 | 自定义 cookie 文件路径 |
+| 环境变量 | 说明 |
+|---------|------|
+| `PROXY_KEY` | 青云代理产品 Key |
+| `PROXY_AUTH_KEY` | 青云代理认证 AuthKey |
+| `PROXY_AUTH_PWD` | 青云代理认证 AuthPwd |
+| `PROXY_API_URL` | 青云代理 API 地址 |
+| `SW_COOKIE_FILE` | SimilarWeb cookie 文件路径 |
 
 ## 前置依赖
 

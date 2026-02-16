@@ -9,7 +9,8 @@
       "proxyKey": { "type": "string", "description": "青云代理产品 Key" },
       "proxyAuthKey": { "type": "string", "description": "青云代理 AuthKey" },
       "proxyAuthPwd": { "type": "string", "description": "青云代理 AuthPwd" },
-      "cookieFilePath": { "type": "string", "description": "自定义 cookie 文件路径" }
+      "proxyApiUrl": { "type": "string", "description": "青云代理 API 地址" },
+      "cookieFilePath": { "type": "string", "description": "SimilarWeb cookie 文件路径" }
     }
   },
   "skills": [

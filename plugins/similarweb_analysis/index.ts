@@ -16,6 +16,8 @@ function buildEnv(pluginConfig?: Record<string, unknown>): NodeJS.ProcessEnv {
     env.PROXY_AUTH_KEY = String(pluginConfig.proxyAuthKey);
   if (pluginConfig.proxyAuthPwd)
     env.PROXY_AUTH_PWD = String(pluginConfig.proxyAuthPwd);
+  if (pluginConfig.proxyApiUrl)
+    env.PROXY_API_URL = String(pluginConfig.proxyApiUrl);
   if (pluginConfig.cookieFilePath)
     env.SW_COOKIE_FILE = String(pluginConfig.cookieFilePath);
   return env;

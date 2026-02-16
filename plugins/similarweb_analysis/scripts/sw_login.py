@@ -13,8 +13,12 @@ import time
 import getpass
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = os.path.join(SCRIPT_DIR, "..", "data")
-COOKIE_FILE = os.path.join(DATA_DIR, "sw_cookies.txt")
+COOKIE_FILE = os.environ.get("SW_COOKIE_FILE")
+if not COOKIE_FILE:
+    raise RuntimeError(
+        "环境变量 SW_COOKIE_FILE 未设置。请在 ~/.claude/.env 或 shell profile 中配置。\n"
+        "详见插件 README.md 的「环境变量配置」章节。"
+    )
 
 DEV_BROWSER_DIR = None
 
@@ -303,7 +307,7 @@ await client.disconnect();
 
 def extract_cookies():
     """从浏览器提取 SimilarWeb cookie 并保存"""
-    os.makedirs(DATA_DIR, exist_ok=True)
+    os.makedirs(os.path.dirname(COOKIE_FILE), exist_ok=True)
     cookie_path = os.path.abspath(COOKIE_FILE)
     script = '''
 import { connect } from "@/client.js";

@@ -11,9 +11,11 @@ import sys
 from datetime import datetime
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = os.path.join(SCRIPT_DIR, "..", "data")
-COOKIE_FILE = os.path.join(DATA_DIR, "sw_cookies.txt")
-LOG_FILE = os.path.join(DATA_DIR, "cookie_check_log.json")
+COOKIE_FILE = os.environ.get("SW_COOKIE_FILE")
+if not COOKIE_FILE:
+    print("[ERROR] 环境变量 SW_COOKIE_FILE 未设置。请在 ~/.claude/.env 或 shell profile 中配置。")
+    sys.exit(1)
+LOG_FILE = os.path.join(os.path.dirname(COOKIE_FILE), "cookie_check_log.json")
 
 # Allow importing from the same scripts directory
 sys.path.insert(0, SCRIPT_DIR)
@@ -28,7 +30,7 @@ def load_log():
 
 
 def save_log(log):
-    os.makedirs(DATA_DIR, exist_ok=True)
+    os.makedirs(os.path.dirname(LOG_FILE), exist_ok=True)
     with open(LOG_FILE, "w") as f:
         json.dump(log, f, ensure_ascii=False, indent=2)
 

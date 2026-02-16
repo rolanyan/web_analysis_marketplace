@@ -5,17 +5,15 @@
 - 自动重试和通道管理
 
 需要设置环境变量:
-  PROXY_API_URL  — 代理 API 地址（默认 https://overseas.proxy.qg.net/get）
   PROXY_KEY      — 代理产品 key
   PROXY_AUTH_KEY — 代理认证 AuthKey
   PROXY_AUTH_PWD — 代理认证 AuthPwd
+  PROXY_API_URL  — 代理 API 地址
 """
 
 import requests
 import time
 import os
-
-PROXY_API = os.environ.get("PROXY_API_URL", "https://overseas.proxy.qg.net/get")
 
 
 def _require_env(name):
@@ -26,6 +24,9 @@ def _require_env(name):
             f"详见插件 README.md 的「环境变量配置」章节。"
         )
     return val
+
+
+PROXY_API = _require_env("PROXY_API_URL")
 
 
 class ProxyPool:
