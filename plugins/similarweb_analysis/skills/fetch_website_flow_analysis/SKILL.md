@@ -26,7 +26,13 @@ description: This skill should be used when user wants to fetch/analyze website 
 ```bash
 PLUGIN_DIR="$(find ~/.claude/plugins/cache -path "*/similarweb_analysis/scripts" -type d 2>/dev/null | head -1)"
 if [ -z "$PLUGIN_DIR" ]; then
+  PLUGIN_DIR="$(find ~/Claude/web_analysis_marketplace -path "*/similarweb_analysis/scripts" -type d 2>/dev/null | head -1)"
+fi
+if [ -z "$PLUGIN_DIR" ]; then
   PLUGIN_DIR="$(find ~/Claude/claude_code_marketplace -path "*/similarweb_analysis/scripts" -type d 2>/dev/null | head -1)"
+fi
+if [ -z "$PLUGIN_DIR" ]; then
+  PLUGIN_DIR="$(find ~/.openclaw/extensions -path "*/similarweb*/scripts" -type d 2>/dev/null | head -1)"
 fi
 DEV_BROWSER_DIR="$(find ~/.claude/plugins/cache -path "*/dev-browser/skills/dev-browser" -type d 2>/dev/null | head -1)"
 ```

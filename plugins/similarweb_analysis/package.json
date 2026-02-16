@@ -1,0 +1,21 @@
+{
+  "name": "@yanqiang/similarweb-analysis",
+  "version": "0.1.0",
+  "description": "SimilarWeb traffic analysis plugin for OpenClaw",
+  "type": "module",
+  "openclaw": {
+    "extensions": ["./index.ts"]
+  },
+  "dependencies": {
+    "@sinclair/typebox": "^0.34.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0"
+  },
+  "files": [
+    "index.ts",
+    "openclaw.plugin.json",
+    "scripts/*.py",
+    "skills/**/*"
+  ]
+}

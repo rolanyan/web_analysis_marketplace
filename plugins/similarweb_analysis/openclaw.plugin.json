@@ -1,0 +1,19 @@
+{
+  "id": "similarweb-analysis",
+  "name": "SimilarWeb Analysis",
+  "description": "Fetch website traffic data from SimilarWeb Pro via API proxy",
+  "version": "0.1.0",
+  "configSchema": {
+    "type": "object",
+    "properties": {
+      "proxyKey": { "type": "string", "description": "青云代理产品 Key" },
+      "proxyAuthKey": { "type": "string", "description": "青云代理 AuthKey" },
+      "proxyAuthPwd": { "type": "string", "description": "青云代理 AuthPwd" },
+      "cookieFilePath": { "type": "string", "description": "自定义 cookie 文件路径" }
+    }
+  },
+  "skills": [
+    "skills/fetch_website_flow_analysis_v2",
+    "skills/fetch_website_flow_analysis"
+  ]
+}

@@ -30,6 +30,8 @@ description: Fetch website traffic data from SimilarWeb via API with proxy IP ro
    - `~/.claude/plugins/cache/*/similarweb_analysis/scripts`
    - `~/Claude/web_analysis_marketplace/plugins/similarweb_analysis/scripts`
    - `~/Claude/claude_code_marketplace/plugins/similarweb_analysis/scripts`
+   - `~/.openclaw/extensions/similarweb-analysis/scripts`
+   - `~/.openclaw/extensions/*/similarweb_analysis/scripts`
 
 ```bash
 # 找到插件的 scripts 目录

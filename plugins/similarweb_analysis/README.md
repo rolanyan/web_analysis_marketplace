@@ -94,3 +94,50 @@ export PROXY_AUTH_PWD="你的AuthPwd"
 |------|------|
 | `/similarweb_analysis:sw_login` | 登录 SimilarWeb 并刷新 cookie |
 | `/similarweb_analysis:sw_check_cookie` | 检查 cookie 有效性 |
+
+---
+
+## OpenClaw 平台支持
+
+本插件同时支持 Claude Code 和 OpenClaw 两个平台，共享 `scripts/` 和 `skills/` 目录。
+
+### OpenClaw 安装
+
+1. 将插件目录加入 OpenClaw 的插件加载路径：
+
+```bash
+openclaw config set plugins.load.paths '["~/Claude/web_analysis_marketplace/plugins/similarweb_analysis"]'
+```
+
+2. 配置代理凭据（通过 OpenClaw plugin config）：
+
+```bash
+openclaw config set plugins.entries.similarweb-analysis.config.proxyKey "你的代理产品Key"
+openclaw config set plugins.entries.similarweb-analysis.config.proxyAuthKey "你的AuthKey"
+openclaw config set plugins.entries.similarweb-analysis.config.proxyAuthPwd "你的AuthPwd"
+```
+
+3. 确认插件已加载：
+
+```bash
+openclaw plugins list
+# 应看到 similarweb-analysis
+```
+
+### OpenClaw 注册的工具
+
+| 工具 | 说明 |
+|------|------|
+| `similarweb_fetch` | 获取域名流量数据（调用 `sw_fetch.py`） |
+| `similarweb_check_cookie` | 检查 cookie 有效性（调用 `sw_check_cookie.py`） |
+
+`sw_login` 需要浏览器交互，不注册为 OpenClaw 工具。请通过 skill 指引手动运行 `python3 scripts/sw_login.py`。
+
+### OpenClaw 使用示例
+
+在 OpenClaw 对话中，agent 会自动调用注册的工具：
+
+```
+> 帮我获取 github.com 的流量数据
+# agent 自动调用 similarweb_fetch(domain: "github.com")
+```
