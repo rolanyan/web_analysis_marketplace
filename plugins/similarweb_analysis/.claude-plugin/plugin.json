@@ -1,6 +1,6 @@
 {
   "name": "similarweb_analysis",
-  "description": "Fetch website traffic overview and referral data from SimilarWeb Pro",
+  "description": "Fetch website traffic overview and referral data from SimilarWeb Pro via API proxy or browser automation",
   "author": {
     "name": "yanqiang"
   }
