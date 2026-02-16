@@ -26,16 +26,12 @@ description: Fetch website traffic data from SimilarWeb via API with proxy IP ro
 ### Step 1: 准备工作
 
 1. 从参数中解析域名，如果未提供则询问用户
-2. 确定脚本目录路径。查找本插件的 scripts 目录，可能在以下位置之一：
-   - `~/.claude/plugins/cache/*/similarweb_analysis/scripts`
-   - `~/Claude/web_analysis_marketplace/plugins/similarweb_analysis/scripts`
-   - `~/Claude/claude_code_marketplace/plugins/similarweb_analysis/scripts`
-   - `~/.openclaw/extensions/similarweb-analysis/scripts`
-   - `~/.openclaw/extensions/*/similarweb_analysis/scripts`
+2. 定位脚本目录（直接运行，不需要手动搜索）：
 
 ```bash
-# 找到插件的 scripts 目录
-SCRIPT_DIR="<找到的 scripts 目录绝对路径>"
+SCRIPT_DIR="$(find ~/.claude/plugins/cache -path "*/similarweb_analysis/*/scripts" -type d 2>/dev/null | head -1)"
+[ -z "$SCRIPT_DIR" ] && SCRIPT_DIR="$(find ~/Claude -path "*/similarweb_analysis/scripts" -type d 2>/dev/null | head -1)"
+[ -z "$SCRIPT_DIR" ] && SCRIPT_DIR="$(find ~/.openclaw/extensions -path "*/similarweb*/scripts" -type d 2>/dev/null | head -1)"
 ```
 
 3. 检查环境变量是否已配置（除非使用 `--no-proxy`）：
