@@ -46,7 +46,7 @@ const similarwebPlugin = {
   name: "SimilarWeb Analysis",
   description:
     "Fetch website traffic data from SimilarWeb Pro via API proxy",
-  version: "0.1.0",
+  version: "0.2.0",
 
   register(api: OpenClawPluginApi) {
     const env = buildEnv(api.pluginConfig as Record<string, unknown>);
