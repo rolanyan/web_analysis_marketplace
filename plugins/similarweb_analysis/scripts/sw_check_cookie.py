@@ -39,9 +39,12 @@ def check():
     now = datetime.now().isoformat()
     api = SimilarWebAPI(cookie_file=COOKIE_FILE)
 
-    # 检查文件
+    # 检查文件，不存在则创建空文件（含父目录）
     if not os.path.exists(COOKIE_FILE):
-        print(f"[{now}] FAIL - cookie 文件不存在: {COOKIE_FILE}")
+        os.makedirs(os.path.dirname(COOKIE_FILE), exist_ok=True)
+        open(COOKIE_FILE, "w").close()
+        print(f"[{now}] cookie 文件不存在，已创建: {COOKIE_FILE}")
+        print("请运行 /sw_login 获取 cookie")
         return False
 
     mtime = os.path.getmtime(COOKIE_FILE)
