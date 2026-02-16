@@ -1,6 +1,6 @@
 {
   "name": "@yanqiang/similarweb-analysis",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "SimilarWeb traffic analysis plugin for OpenClaw",
   "type": "module",
   "openclaw": {
