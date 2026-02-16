@@ -1,96 +1,86 @@
 ---
 name: fetch_website_flow_analysis_v2
-description: Fetch website traffic data from SimilarWeb via API with proxy IP rotation.
-  Trigger phrases include "fetch similarweb data", "analyze website traffic",
-  "get referral sources", "similarweb analysis".
+description: This skill should be used when the user asks to "fetch similarweb data",
+  "analyze website traffic", "get referral sources", "similarweb analysis", or wants
+  to extract SimilarWeb traffic data for a domain via API with proxy IP rotation.
 ---
 
-# SimilarWeb 网站流量分析（v2 — API + 代理方案）
+# SimilarWeb Traffic Analysis (v2 — API + Proxy)
 
-通过 SimilarWeb 内部 API + 青云代理 IP 获取网站流量数据。
-比 v1（dev-browser）方案更快、更稳定、更不容易被封。
+Extract website traffic data from SimilarWeb internal APIs with Qingyun proxy IP rotation.
+Faster and more stable than v1 (dev-browser).
 
-## 前置条件
+## Prerequisites
 
-- Python 3.10+ 已安装，`requests` 包可用
-- 环境变量已全部配置: `PROXY_BIZ_ID`, `PROXY_AUTH_KEY`, `PROXY_AUTH_PWD`, `PROXY_API_URL`, `SW_COOKIE_FILE`（详见 README）
-- 有效的 SimilarWeb cookie 文件（过期时运行 `/sw_login` 刷新）
+- Python 3.10+ with `requests` package
+- All environment variables configured: `PROXY_BIZ_ID`, `PROXY_AUTH_KEY`, `PROXY_AUTH_PWD`, `PROXY_API_URL`, `SW_COOKIE_FILE` (see README)
+- Valid SimilarWeb cookie (run `/sw_login` to refresh when expired)
 
-## 参数
+## Parameters
 
-- `domain`: 目标域名（如 `github.com`），从命令参数中获取
-- `--no-proxy`: 可选，不使用代理直接请求（本地测试用）
+- `domain`: Target domain (e.g. `github.com`), from command arguments
+- `--no-proxy`: Optional, skip proxy and connect directly (for local testing)
 
-## 执行流程
+## Workflow
 
-### Step 1: 准备工作
+### Step 1: Preparation
 
-1. 从参数中解析域名，如果未提供则询问用户
-2. 定位脚本目录（直接运行，不需要手动搜索）：
+1. Parse domain from arguments. If not provided, ask the user.
 
-```bash
-SCRIPT_DIR="$(find ~/.claude/plugins/cache -path "*/similarweb_analysis/*/scripts" -type d 2>/dev/null | head -1)"
-[ -z "$SCRIPT_DIR" ] && SCRIPT_DIR="$(find ~/Claude -path "*/similarweb_analysis/scripts" -type d 2>/dev/null | head -1)"
-[ -z "$SCRIPT_DIR" ] && SCRIPT_DIR="$(find ~/.openclaw/extensions -path "*/similarweb*/scripts" -type d 2>/dev/null | head -1)"
-```
-
-3. 检查环境变量是否已配置（除非使用 `--no-proxy`）：
+2. Check environment variables (unless using `--no-proxy`):
 
 ```bash
-python3 -c "import os; [print(f'  {k}: {'已设置' if os.environ.get(k) else '未设置'}') for k in ['PROXY_BIZ_ID','PROXY_AUTH_KEY','PROXY_AUTH_PWD','PROXY_API_URL','SW_COOKIE_FILE']]"
+python3 -c "import os; [print(f'  {k}: {'set' if os.environ.get(k) else 'NOT SET'}') for k in ['PROXY_BIZ_ID','PROXY_AUTH_KEY','PROXY_AUTH_PWD','PROXY_API_URL','SW_COOKIE_FILE']]"
 ```
 
-5 个环境变量全部必须设置。如果缺少任何一个，提示用户参考 README 的「环境变量配置」章节，并停止执行。
+All 5 must be set. If any is missing, direct the user to README's environment variable section and stop.
 
-4. 检查 cookie 有效性：
+3. Check cookie validity:
 
 ```bash
-python3 "$SCRIPT_DIR/sw_check_cookie.py"
+python3 "${CLAUDE_PLUGIN_ROOT}/scripts/sw_check_cookie.py"
 ```
 
-如果 cookie 无效，提示用户运行 `/sw_login` 刷新，并停止执行。
+If cookie is invalid, direct user to run `/sw_login` and stop.
 
-### Step 2: 获取数据
-
-运行数据获取脚本：
+### Step 2: Fetch data
 
 ```bash
-python3 "$SCRIPT_DIR/sw_fetch.py" "{domain}"
+python3 "${CLAUDE_PLUGIN_ROOT}/scripts/sw_fetch.py" "{domain}"
 ```
 
-或不用代理：
+Or without proxy:
 
 ```bash
-python3 "$SCRIPT_DIR/sw_fetch.py" "{domain}" --no-proxy
+python3 "${CLAUDE_PLUGIN_ROOT}/scripts/sw_fetch.py" "{domain}" --no-proxy
 ```
 
-脚本会：
-- 从青云代理池提取一个海外住宅 IP
-- 通过代理调用 SimilarWeb 11 个数据 API
-- 遇到 403/SSL 错误自动换 IP 重试
-- 将原始 JSON 保存到 `web_data/{domain}/raw_api_data.json`
-- 将格式化的 overview 保存到 `web_data/{domain}/overview.md`
-- 将外链数据保存到 `web_data/{domain}/referrals_incoming.csv`
+The script will:
+- Extract an overseas residential IP from Qingyun proxy pool
+- Call 11 SimilarWeb data APIs through the proxy
+- Auto-retry with new IP on 403/SSL errors
+- Save raw JSON to `web_data/{domain}/raw_api_data.json`
+- Save formatted overview to `web_data/{domain}/overview.md`
+- Save referral data to `web_data/{domain}/referrals_incoming.csv`
 
-**检查点**: 确认输出文件已生成。如果脚本报错 403 且 cookie 未过期，可能是代理 IP 被封，
-脚本会自动换 IP 重试（最多 3 次）。
+**Checkpoint**: Confirm output files are generated. On 403 errors with valid cookie, the script auto-retries with new IP (up to 3 times).
 
-### Step 3: 汇报结果
+### Step 3: Report results
 
-**重要：控制上下文大小，避免触发 API 请求 20MB 限制。**
+**Important: Control context size to avoid the 20MB API request limit.**
 
-- 读取 `overview.md`，向用户展示关键指标摘要（总访问量、排名、设备分布、流量来源）
-- 读取 `referrals_incoming.csv` 的**前 6 行**（表头 + Top 5），并报告总行数
-- **禁止读取 `raw_api_data.json`** — 该文件包含 11 个 API 的原始 JSON，可能数 MB，读入会导致对话上下文膨胀
-- 告知用户文件保存路径
+- Read `overview.md` and present key metrics summary (visits, ranks, device split, traffic sources)
+- Read only the **first 6 lines** of `referrals_incoming.csv` (header + Top 5) and report total row count
+- **Never read `raw_api_data.json`** — it contains raw JSON from 11 APIs and may be several MB; loading it will bloat the conversation context
+- Report file save paths to the user
 
-## 异常处理
+## Error Handling
 
-| 异常 | 处理方式 |
-|------|---------|
-| cookie 无效/过期 | 提示用户运行 `/sw_login` |
-| 代理通道占用 | 脚本自动等待重试（最多 3 次，每次 30s） |
-| 代理 IP 被 SimilarWeb 封 (403) | 自动换 IP 重试 |
-| SSL/连接错误 | 自动换 IP 重试 |
-| 代理 API 不可用 | 提示用户加 `--no-proxy` 直连（注意封 IP 风险） |
-| Python/requests 未安装 | 提示用户安装 |
+| Error | Resolution |
+|-------|-----------|
+| Cookie invalid/expired | Direct user to run `/sw_login` |
+| Proxy channel busy | Script auto-retries (up to 3 times, 30s apart) |
+| Proxy IP blocked by SimilarWeb (403) | Auto-retry with new IP |
+| SSL/connection error | Auto-retry with new IP |
+| Proxy API unavailable | Suggest `--no-proxy` flag (note IP ban risk) |
+| Python/requests not installed | Direct user to install |
