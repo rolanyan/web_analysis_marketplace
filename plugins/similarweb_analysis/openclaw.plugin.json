@@ -2,7 +2,7 @@
   "id": "similarweb-analysis",
   "name": "SimilarWeb Analysis",
   "description": "Fetch website traffic data from SimilarWeb Pro via API proxy",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "configSchema": {
     "type": "object",
     "properties": {
