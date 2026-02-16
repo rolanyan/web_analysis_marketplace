@@ -114,8 +114,8 @@ dmypy.json
 node_modules/
 
 # Scraped data (don't commit raw data)
-data/raw/
-data/cache/
+data/
+web_data/
 *.csv
 *.json.gz
 
