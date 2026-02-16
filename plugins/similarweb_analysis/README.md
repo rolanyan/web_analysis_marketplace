@@ -64,13 +64,13 @@ export PROXY_AUTH_PWD="你的AuthPwd"
 /sw_check_cookie
 
 # 获取数据
-/fetch_website_flow_analysis_v2 stackoverflow.com
+/similarweb_analysis:fetch_website_flow_analysis_v2 stackoverflow.com
 ```
 
 ### v1 方案（备用）
 
 ```bash
-/fetch_website_flow_analysis stackoverflow.com
+/similarweb_analysis:fetch_website_flow_analysis stackoverflow.com
 ```
 
 ## 输出
