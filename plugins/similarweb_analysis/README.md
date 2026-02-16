@@ -131,7 +131,7 @@ openclaw plugins list
 | `similarweb_fetch` | 获取域名流量数据（调用 `sw_fetch.py`） |
 | `similarweb_check_cookie` | 检查 cookie 有效性（调用 `sw_check_cookie.py`） |
 
-`sw_login` 需要浏览器交互，不注册为 OpenClaw 工具。请通过 skill 指引手动运行 `python3 scripts/sw_login.py`。
+`sw_login` 需要终端交互输入（Google 邮箱、密码、验证码），无法作为非交互式 OpenClaw 工具运行。Cookie 过期时请在终端直接运行 `python3 scripts/sw_login.py`。
 
 ### OpenClaw 使用示例
 

@@ -91,7 +91,7 @@ Run this whenever API requests start returning 401/403 errors.
 | `similarweb_fetch` | Fetch domain traffic data (calls `sw_fetch.py`) |
 | `similarweb_check_cookie` | Check cookie validity (calls `sw_check_cookie.py`) |
 
-Note: `sw_login` requires browser interaction and is not registered as an OpenClaw tool. Run `python3 scripts/sw_login.py` manually when cookie expires.
+Note: `sw_login` requires interactive terminal input (Google credentials, verification code) and cannot run as a non-interactive OpenClaw tool. Run `python3 scripts/sw_login.py` directly in your terminal when cookie expires.
 
 ## Output
 
