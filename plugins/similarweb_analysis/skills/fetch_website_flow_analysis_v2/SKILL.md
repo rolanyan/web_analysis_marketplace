@@ -81,10 +81,12 @@ python3 "$SCRIPT_DIR/sw_fetch.py" "{domain}" --no-proxy
 
 ### Step 3: 汇报结果
 
-读取生成的文件，向用户报告：
-- overview.md 的关键数据摘要（总访问量、排名、设备分布、流量来源）
-- referrals_incoming.csv 的记录数和 Top 5 来源
-- 文件保存路径
+**重要：控制上下文大小，避免触发 API 请求 20MB 限制。**
+
+- 读取 `overview.md`，向用户展示关键指标摘要（总访问量、排名、设备分布、流量来源）
+- 读取 `referrals_incoming.csv` 的**前 6 行**（表头 + Top 5），并报告总行数
+- **禁止读取 `raw_api_data.json`** — 该文件包含 11 个 API 的原始 JSON，可能数 MB，读入会导致对话上下文膨胀
+- 告知用户文件保存路径
 
 ## 异常处理
 
