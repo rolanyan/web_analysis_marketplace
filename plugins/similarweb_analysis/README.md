@@ -113,7 +113,11 @@ openclaw config set plugins.load.paths '["~/Claude/web_analysis_marketplace/plug
 openclaw config set plugins.entries.similarweb-analysis.config.proxyBizId "你的业务标识"
 openclaw config set plugins.entries.similarweb-analysis.config.proxyAuthKey "你的AuthKey"
 openclaw config set plugins.entries.similarweb-analysis.config.proxyAuthPwd "你的AuthPwd"
+openclaw config set plugins.entries.similarweb-analysis.config.proxyApiUrl "https://overseas.proxy.qg.net/get"
+openclaw config set plugins.entries.similarweb-analysis.config.cookieFilePath "/path/to/sw_cookies.txt"
 ```
+
+> **注意**: 5 项配置缺一不可，否则 `similarweb_fetch` 工具会返回空结果。`cookieFilePath` 建议设为插件目录下的 `data/sw_cookies.txt`。
 
 3. 确认插件已加载：
 
