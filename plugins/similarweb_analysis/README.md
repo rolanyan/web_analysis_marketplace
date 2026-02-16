@@ -58,10 +58,10 @@ export PROXY_AUTH_PWD="你的AuthPwd"
 
 ```bash
 # 首次使用: 登录并获取 cookie
-/sw_login
+/similarweb_analysis:sw_login
 
 # 检查 cookie 是否有效
-/sw_check_cookie
+/similarweb_analysis:sw_check_cookie
 
 # 获取数据
 /similarweb_analysis:fetch_website_flow_analysis_v2 stackoverflow.com
@@ -92,5 +92,5 @@ export PROXY_AUTH_PWD="你的AuthPwd"
 
 | 命令 | 说明 |
 |------|------|
-| `/sw_login` | 登录 SimilarWeb 并刷新 cookie |
-| `/sw_check_cookie` | 检查 cookie 有效性 |
+| `/similarweb_analysis:sw_login` | 登录 SimilarWeb 并刷新 cookie |
+| `/similarweb_analysis:sw_check_cookie` | 检查 cookie 有效性 |
