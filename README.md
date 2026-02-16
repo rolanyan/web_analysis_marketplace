@@ -1,57 +1,149 @@
 # Web Analysis Marketplace
 
-为从各网站爬取数据定制的 Claude Code 插件市场。
+A plugin marketplace for automated website traffic data extraction. Works with both **Claude Code** and **OpenClaw**.
 
-## 概述
+## What It Does
 
-本仓库是一个 Claude Code 插件市场，专注于网站数据爬取和分析场景。每个插件针对特定网站或数据分析需求提供定制化的命令、Agent 和技能。
+Automatically fetches website traffic data from SimilarWeb Pro — including visits, rankings, engagement metrics, geographic distribution, traffic sources, and top referral domains.
 
-## 项目结构
+**Example**: run `/fetch_website_flow_analysis_v2 github.com` and get a structured overview + referral CSV in seconds.
+
+## Quick Start
+
+### Claude Code
+
+```bash
+# 1. Install the marketplace and plugin
+/plugin marketplace add rolanyan/web_analysis_marketplace
+/plugin install similarweb_analysis@rolanyan/web_analysis_marketplace
+
+# 2. Restart Claude Code, then login to SimilarWeb
+/similarweb_analysis:sw_login
+
+# 3. Configure proxy environment variables (in ~/.claude/.env or shell profile)
+export PROXY_KEY="your-proxy-key"
+export PROXY_AUTH_KEY="your-auth-key"
+export PROXY_AUTH_PWD="your-auth-pwd"
+
+# 4. Fetch data
+/similarweb_analysis:fetch_website_flow_analysis_v2 github.com
+```
+
+### OpenClaw
+
+```bash
+# 1. Install the plugin
+cd plugins/similarweb_analysis && npm install
+
+# 2. Add plugin to OpenClaw config
+openclaw config set plugins.load.paths '["path/to/web_analysis_marketplace/plugins/similarweb_analysis"]'
+
+# 3. Configure proxy credentials
+openclaw config set plugins.entries.similarweb-analysis.config.proxyKey "your-proxy-key"
+openclaw config set plugins.entries.similarweb-analysis.config.proxyAuthKey "your-auth-key"
+openclaw config set plugins.entries.similarweb-analysis.config.proxyAuthPwd "your-auth-pwd"
+
+# 4. Login to SimilarWeb (requires dev-browser, run manually)
+python3 plugins/similarweb_analysis/scripts/sw_login.py
+
+# 5. Fetch data (in OpenClaw conversation)
+> 帮我获取 github.com 的流量数据
+# Agent automatically calls similarweb_fetch(domain: "github.com")
+```
+
+## Prerequisites
+
+- **Python 3.10+** with `requests` package
+- **SimilarWeb Pro account** (cookie-based authentication)
+- **Proxy IP pool** (Qingyun residential proxy recommended for v2)
+- **dev-browser plugin** (Claude Code only, required for `/sw_login`)
+
+## Login Flow
+
+The `/sw_login` command (or `python3 scripts/sw_login.py`) handles SimilarWeb authentication:
+
+1. Checks if existing cookie is still valid
+2. Launches dev-browser and navigates to SimilarWeb
+3. Clicks "Sign in with Google" automatically
+4. Prompts you for Google email and password (password input is hidden)
+5. Fills Google credentials automatically (two-step: email → password)
+6. Handles Google 2FA if needed (falls back to manual browser interaction)
+7. Handles SimilarWeb 6-digit device verification code if prompted
+8. Extracts and saves the session cookie
+
+Run this whenever API requests start returning 401/403 errors.
+
+## Available Commands
+
+### Claude Code
+
+| Command | Description |
+|---------|-------------|
+| `/similarweb_analysis:fetch_website_flow_analysis_v2` | Fetch data via API + proxy (recommended) |
+| `/similarweb_analysis:fetch_website_flow_analysis` | Fetch data via browser automation (fallback) |
+| `/similarweb_analysis:sw_login` | Login to SimilarWeb and refresh cookie |
+| `/similarweb_analysis:sw_check_cookie` | Check cookie validity |
+
+### OpenClaw
+
+| Tool | Description |
+|------|-------------|
+| `similarweb_fetch` | Fetch domain traffic data (calls `sw_fetch.py`) |
+| `similarweb_check_cookie` | Check cookie validity (calls `sw_check_cookie.py`) |
+
+Note: `sw_login` requires browser interaction and is not registered as an OpenClaw tool. Run `python3 scripts/sw_login.py` manually when cookie expires.
+
+## Output
+
+Data is saved to `web_data/{domain}/`:
+
+| File | Content |
+|------|---------|
+| `overview.md` | Traffic overview — visits, ranks, engagement, geography, traffic sources |
+| `referrals_incoming.csv` | Top 100 referral domains with industry, rank, traffic share |
+| `raw_api_data.json` | Raw JSON from 11 SimilarWeb APIs (v2 only) |
+
+## Environment Variables
+
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `PROXY_KEY` | v2 | Qingyun proxy product key |
+| `PROXY_AUTH_KEY` | v2 | Qingyun proxy auth key |
+| `PROXY_AUTH_PWD` | v2 | Qingyun proxy auth password |
+| `PROXY_API_URL` | No | Proxy API endpoint (default: overseas residential pool) |
+| `SW_COOKIE_FILE` | No | Custom cookie file path |
+
+For Claude Code, set these in `~/.claude/.env` or your shell profile (`~/.zshrc`).
+For OpenClaw, set via `openclaw config set plugins.entries.similarweb-analysis.config.*`.
+
+## Project Structure
 
 ```
 web_analysis_marketplace/
-├── .claude-plugin/plugin.json   # 市场元数据
-├── plugins/                      # 插件目录
-│   └── <plugin-name>/           # 各插件子目录
-├── CLAUDE.md                     # Claude Code 上下文
+├── .claude-plugin/              # Claude Code marketplace metadata
+│   ├── plugin.json
+│   └── marketplace.json
+├── plugins/
+│   └── similarweb_analysis/     # SimilarWeb plugin
+│       ├── .claude-plugin/      #   Claude Code plugin metadata
+│       ├── openclaw.plugin.json #   OpenClaw plugin metadata
+│       ├── package.json         #   OpenClaw npm package
+│       ├── index.ts             #   OpenClaw tool registration
+│       ├── commands/            #   Claude Code slash commands
+│       ├── skills/              #   Shared skill definitions
+│       ├── scripts/             #   Python scripts (shared by both platforms)
+│       │   ├── sw_login.py      #     Google OAuth login + cookie extraction
+│       │   ├── sw_fetch.py      #     Data fetching via API + proxy
+│       │   ├── sw_check_cookie.py   # Cookie validity check
+│       │   ├── similarweb_api.py    # SimilarWeb API client
+│       │   └── proxy_pool.py        # Qingyun proxy pool client
+│       ├── data/                #   Cookie and logs (gitignored)
+│       └── web_data/            #   Fetched data output
+├── CLAUDE.md
 ├── README.md
-├── LICENSE
-└── .gitignore
+└── LICENSE (MIT)
 ```
 
-## 插件列表
+## License
 
-| 插件 | 描述 | 命令 |
-|------|------|------|
-| [similarweb_analysis](plugins/similarweb_analysis/) | 从 SimilarWeb Pro 自动提取网站流量概览和外链来源数据 | `/fetch_website_flow_analysis` |
-
-## 安装使用
-
-在 Claude Code 中执行：
-
-```
-/plugin marketplace add rolanyan/web_analysis_marketplace
-/plugin install <plugin-name>@rolanyan/web_analysis_marketplace
-```
-
-例如安装 `similarweb_analysis` 插件：
-
-```
-/plugin marketplace add rolanyan/web_analysis_marketplace
-/plugin install similarweb_analysis@rolanyan/web_analysis_marketplace
-```
-
-安装完成后重启 Claude Code。
-
-## 开发新插件
-
-1. 在 `plugins/` 下创建新目录
-2. 添加 `plugin.json` 定义插件元数据
-3. 添加 `README.md` 编写文档
-4. 根据需要添加 `commands/`、`agents/`、`skills/`、`hooks/`、`scripts/` 目录
-
-详细规范参见 [CLAUDE.md](CLAUDE.md)。
-
-## 许可证
-
-MIT License
+MIT
